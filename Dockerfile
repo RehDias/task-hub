@@ -1,9 +1,10 @@
-FROM maven:3-openjdk-17 as build-image
+FROM eclipse-temurin:17-jdk-jammy as build-image
 WORKDIR /app
 
 COPY .mvn/ .mvn
 COPY mvnw pom.xml ./
 
+RUN chmod +x mvnw
 RUN ./mvnw dependency:go-offline
 
 COPY ./src/main/ ./src/main/

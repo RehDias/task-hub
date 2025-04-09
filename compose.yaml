@@ -10,7 +10,7 @@ services:
       - postgresdb
 
   postgresdb:
-    image: 'postgres:latest'
+    image: 'postgres:alpine'
     restart: always
     environment:
       - 'POSTGRES_DB=project_team_db'

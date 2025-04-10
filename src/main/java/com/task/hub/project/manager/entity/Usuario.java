@@ -15,17 +15,21 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Size;
+import java.util.Collection;
 import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "usuarios")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Usuario {
+public class Usuario implements UserDetails {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,7 +47,7 @@ public class Usuario {
   @Column(nullable = false)
   @Size(min = 8, message = "A senha deve ter no mínimo 8 caracteres")
   @NotBlank(message = "A senha é obrigatória")
-  private String senha;
+  private String password;
 
   @ManyToMany(mappedBy = "membros", cascade = CascadeType.ALL)
   private List<Time> time;
@@ -52,5 +56,24 @@ public class Usuario {
   private List<Tarefa> tarefas;
 
   @Enumerated(EnumType.STRING)
-  private Roles role;
+  private String role;
+
+  @Column(nullable = false, unique = true)
+  @NotBlank(message = "O username é obrigatório")
+  private String username;
+
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    return List.of(new SimpleGrantedAuthority(role));
+  }
+
+  @Override
+  public String getPassword() {
+    return password;
+  }
+
+  @Override
+  public String getUsername() {
+    return username;
+  }
 }

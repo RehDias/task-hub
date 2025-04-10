@@ -42,4 +42,10 @@ public class Time {
   @ManyToOne
   @JoinColumn(name = "projeto_id")
   private Projeto projeto;
+
+  public Time(String nome, List<Usuario> membros, Projeto projeto) {
+    this.nome = nome;
+    this.membros = membros;
+    this.projeto = projeto;
+  }
 }

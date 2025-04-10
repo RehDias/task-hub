@@ -61,6 +61,17 @@ public class Usuario implements UserDetails {
   @NotBlank(message = "O username é obrigatório")
   private String username;
 
+  public Usuario(String nome, String email, String password, List<Time> time, List<Tarefa> tarefas,
+      String role, String username) {
+    this.nome = nome;
+    this.email = email;
+    this.password = password;
+    this.time = time;
+    this.tarefas = tarefas;
+    this.role = role;
+    this.username = username;
+  }
+
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return List.of(new SimpleGrantedAuthority(role));

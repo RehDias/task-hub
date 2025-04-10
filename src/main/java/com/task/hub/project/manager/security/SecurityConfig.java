@@ -35,7 +35,7 @@ public class SecurityConfig {
             session -> session.sessionCreationPolicy(
                 SessionCreationPolicy.STATELESS
             ))
-        .authorizeHttpRequests( authorize -> authorize
+        .authorizeHttpRequests(authorize -> authorize
             .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()
             .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
             .anyRequest().authenticated())
@@ -52,7 +52,7 @@ public class SecurityConfig {
   }
 
   @Bean
-  public PasswordEncoder passwordEncoder(){
+  public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }
 }

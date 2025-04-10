@@ -4,6 +4,7 @@ import com.task.hub.project.manager.entity.Usuario;
 import com.task.hub.project.manager.repository.UsuarioRepository;
 import com.task.hub.project.manager.service.exceptions.SenhaInvalidaException;
 import com.task.hub.project.manager.service.exceptions.UsuarioNotFoundException;
+import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,9 +13,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 @Service
+@Validated
 public class UsuarioService implements UserDetailsService {
+
   private final UsuarioRepository usuarioRepository;
   private final PasswordEncoder passwordEncoder;
 
@@ -30,7 +34,7 @@ public class UsuarioService implements UserDetailsService {
         .orElseThrow(() -> new UsernameNotFoundException(username));
   }
 
-  public Usuario criarUsuario(Usuario usuario) {
+  public Usuario criarUsuario(@Valid Usuario usuario) {
     String hashedPassword = new BCryptPasswordEncoder()
         .encode(usuario.getPassword());
     usuario.setPassword(hashedPassword);
@@ -38,7 +42,7 @@ public class UsuarioService implements UserDetailsService {
     return usuarioRepository.save(usuario);
   }
 
-  public List<Usuario> showALl() {
+  public List<Usuario> buscarUsuarios() {
     return usuarioRepository.findAll();
   }
 
@@ -46,7 +50,8 @@ public class UsuarioService implements UserDetailsService {
     return usuarioRepository.findById(id).orElseThrow(UsuarioNotFoundException::new);
   }
 
-  public Usuario atualizarUsuario(Long id, Usuario usuario) throws UsuarioNotFoundException {
+  public Usuario atualizarUsuario(Long id, @Valid Usuario usuario)
+      throws UsuarioNotFoundException {
     Usuario usuarioDb = buscarPorId(id);
 
     usuarioDb.setNome(usuario.getNome());
@@ -72,7 +77,7 @@ public class UsuarioService implements UserDetailsService {
     return usuario;
   }
 
-  public void alterarSenha(Long id, String senhaAtual, String novaSenha)
+  public void alterarSenha(Long id, @Valid String senhaAtual, @Valid String novaSenha)
       throws UsuarioNotFoundException, SenhaInvalidaException {
     Usuario usuario = buscarPorId(id);
 

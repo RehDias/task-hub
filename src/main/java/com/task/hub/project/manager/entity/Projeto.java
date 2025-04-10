@@ -38,6 +38,4 @@ public class Projeto {
 
   @OneToMany(mappedBy = "projeto")
   private List<Time> times;
-
-
 }

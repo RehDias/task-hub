@@ -36,7 +36,7 @@ public class SecurityConfig {
                 SessionCreationPolicy.STATELESS
             ))
         .authorizeHttpRequests(authorize -> authorize
-            .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()
+            .requestMatchers(HttpMethod.POST, "/usuario").permitAll()
             .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
             .anyRequest().authenticated())
         .headers(headers -> headers

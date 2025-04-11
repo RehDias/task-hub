@@ -83,25 +83,6 @@
 	</dependencies>
 
 	<build>
-		<resources>
-			<!-- Não faz filtering para todos por padrão -->
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>false</filtering>
-				<includes>
-					<include>**/*.properties</include>
-				</includes>
-			</resource>
-
-<!--			&lt;!&ndash; Faz filtering só para o application-prod.properties &ndash;&gt;-->
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
-				<includes>
-					<include>application-prod.properties</include>
-				</includes>
-			</resource>
-		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

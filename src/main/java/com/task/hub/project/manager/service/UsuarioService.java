@@ -1,5 +1,6 @@
 package com.task.hub.project.manager.service;
 
+import com.task.hub.project.manager.dto.UsuarioCreationDto;
 import com.task.hub.project.manager.entity.Usuario;
 import com.task.hub.project.manager.repository.UsuarioRepository;
 import com.task.hub.project.manager.service.exceptions.SenhaInvalidaException;
@@ -37,6 +38,7 @@ public class UsuarioService implements UserDetailsService {
   public Usuario criarUsuario(@Valid Usuario usuario) {
     String hashedPassword = new BCryptPasswordEncoder()
         .encode(usuario.getPassword());
+
     usuario.setPassword(hashedPassword);
 
     return usuarioRepository.save(usuario);

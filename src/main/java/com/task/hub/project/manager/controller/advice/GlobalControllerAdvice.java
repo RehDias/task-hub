@@ -1,5 +1,6 @@
 package com.task.hub.project.manager.controller.advice;
 
+import com.task.hub.project.manager.dto.ErrorResponse;
 import com.task.hub.project.manager.service.exceptions.NotFoundException;
 import com.task.hub.project.manager.service.exceptions.SenhaInvalidaException;
 import jakarta.validation.ConstraintViolation;
@@ -24,19 +25,7 @@ public class GlobalControllerAdvice {
     for (ConstraintViolation<?> violation : exception.getConstraintViolations()) {
       errors.put(violation.getPropertyPath().toString(), violation.getMessage());
     }
-    return errors;
-  }
-
-  // validação da dto
-  @ExceptionHandler(MethodArgumentNotValidException.class)
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
-  public Map<String, String> handleMethodArgumentNotValidError(
-      MethodArgumentNotValidException exception) {
-    Map<String, String> errors = new HashMap<>();
-    for (FieldError error : exception.getBindingResult().getFieldErrors()) {
-      errors.put(error.getField(), error.getDefaultMessage());
-    }
-    return errors;
+    return new ErrorResponse(errors).getErrors();
   }
 
   @ExceptionHandler

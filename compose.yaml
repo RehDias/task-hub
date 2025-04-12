@@ -1,13 +1,13 @@
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: project_manager
-    ports:
-      - "8080:8080"
-    depends_on:
-      - postgresdb
+#  app:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    container_name: project_manager
+#    ports:
+#      - "8080:8080"
+#    depends_on:
+#      - postgresdb
 
   postgresdb:
     image: 'postgres:alpine'

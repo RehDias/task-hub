@@ -39,13 +39,10 @@ public class Projeto {
   @OneToMany(mappedBy = "projeto")
   private List<Time> times;
 
-  public Projeto(String nome, String descricao, LocalDate dataInicio, LocalDate dataFim,
-      List<Tarefa> tarefas, List<Time> times) {
+  public Projeto(String nome, String descricao, LocalDate dataInicio, LocalDate dataFim) {
     this.nome = nome;
     this.descricao = descricao;
     this.dataInicio = dataInicio;
     this.dataFim = dataFim;
-    this.tarefas = tarefas;
-    this.times = times;
   }
 }

@@ -20,8 +20,12 @@ public record ProjetoDto(
         projeto.getDescricao(),
         projeto.getDataInicio(),
         projeto.getDataFim(),
-        projeto.getTarefas().stream().map(TarefaDto::fromEntity).toList(),
-        projeto.getTimes().stream().map(TimeDto::fromEntity).toList()
+        projeto.getTarefas() != null
+            ? projeto.getTarefas().stream().map(TarefaDto::fromEntity).toList()
+            : List.of(),
+        projeto.getTimes() != null
+            ? projeto.getTimes().stream().map(TimeDto::fromEntity).toList()
+            : List.of()
     );
   }
 }

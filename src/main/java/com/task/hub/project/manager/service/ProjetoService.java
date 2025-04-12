@@ -39,10 +39,6 @@ public Projeto atualizarProjeto(Long id, @Valid Projeto projeto) throws ProjetoN
 
     projetoDb.setNome(projeto.getNome());
     projetoDb.setDescricao(projeto.getDescricao());
-    projetoDb.getTimes().clear();
-    projetoDb.getTimes().addAll(projeto.getTimes());
-    projetoDb.getTarefas().clear();
-    projetoDb.getTarefas().addAll(projeto.getTarefas());
     projetoDb.setDataFim(projeto.getDataFim());
 
     return projetoRepository.save(projetoDb);

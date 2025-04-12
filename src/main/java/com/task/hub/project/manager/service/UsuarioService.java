@@ -1,9 +1,11 @@
 package com.task.hub.project.manager.service;
 
 import com.task.hub.project.manager.dto.UsuarioCreationDto;
+import com.task.hub.project.manager.entity.Time;
 import com.task.hub.project.manager.entity.Usuario;
 import com.task.hub.project.manager.repository.UsuarioRepository;
 import com.task.hub.project.manager.service.exceptions.SenhaInvalidaException;
+import com.task.hub.project.manager.service.exceptions.TimeNotFoundException;
 import com.task.hub.project.manager.service.exceptions.UsuarioNotFoundException;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -22,11 +24,14 @@ public class UsuarioService implements UserDetailsService {
 
   private final UsuarioRepository usuarioRepository;
   private final PasswordEncoder passwordEncoder;
+  private final TimeService timeService;
 
   @Autowired
-  public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
+  public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder,
+      TimeService timeService) {
     this.usuarioRepository = usuarioRepository;
     this.passwordEncoder = passwordEncoder;
+    this.timeService = timeService;
   }
 
   @Override
@@ -60,14 +65,6 @@ public class UsuarioService implements UserDetailsService {
     usuarioDb.setUsername(usuario.getUsername());
     usuarioDb.setEmail(usuario.getEmail());
 
-    if (usuario.getTime() != null) {
-      usuarioDb.setTime(usuario.getTime());
-    }
-
-    if (usuario.getTarefas() != null) {
-      usuarioDb.setTarefas(usuario.getTarefas());
-    }
-
     return usuarioRepository.save(usuarioDb);
   }
 
@@ -94,4 +91,27 @@ public class UsuarioService implements UserDetailsService {
     usuario.setPassword(passwordEncoder.encode(novaSenha));
     usuarioRepository.save(usuario);
   }
+
+  public Usuario adicionarMembroNoTime(Long usuarioId, Long timeId)
+      throws UsuarioNotFoundException, TimeNotFoundException {
+    Usuario usuario = buscarPorId(usuarioId);
+    Time time = timeService.buscarPorId(timeId);
+
+    usuario.getTime().add(time);
+    time.getMembros().add(usuario);
+
+    timeService.salvarTime(time);
+    return usuarioRepository.save(usuario);
+  }
+
+  public Usuario removerMembroDoTime(Long usuarioId, Long timeId)
+      throws UsuarioNotFoundException, TimeNotFoundException {
+    Usuario usuario = buscarPorId(usuarioId);
+    Time time = timeService.buscarPorId(timeId);
+
+    usuario.getTime().remove(time);
+
+    return usuarioRepository.save(usuario);
+  }
+
 }

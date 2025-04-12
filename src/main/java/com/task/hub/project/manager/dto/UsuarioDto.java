@@ -17,8 +17,12 @@ public record UsuarioDto(
         usuario.getId(),
         usuario.getNome(),
         usuario.getEmail(),
-        usuario.getTime().stream().map(TimeDto::fromEntity).toList(),
-        usuario.getTarefas().stream().map(TarefaDto::fromEntity).toList(),
+        usuario.getTime() != null
+            ? usuario.getTime().stream().map(TimeDto::fromEntity).toList()
+            : List.of(),
+        usuario.getTarefas() != null
+            ? usuario.getTarefas().stream().map(TarefaDto::fromEntity).toList()
+            : List.of(),
         usuario.getUsername(),
         usuario.getRole()
     );

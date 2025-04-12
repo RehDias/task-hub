@@ -43,9 +43,7 @@ public class Time {
   @JoinColumn(name = "projeto_id")
   private Projeto projeto;
 
-  public Time(String nome, List<Usuario> membros, Projeto projeto) {
+  public Time(String nome) {
     this.nome = nome;
-    this.membros = membros;
-    this.projeto = projeto;
   }
 }

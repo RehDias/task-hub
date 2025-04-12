@@ -36,12 +36,18 @@ public class SecurityConfig {
                 SessionCreationPolicy.STATELESS
             ))
         .authorizeHttpRequests(authorize -> authorize
-            .requestMatchers(HttpMethod.POST, "/usuario").permitAll()
+            .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()
             .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+            .requestMatchers("/h2-console/**").permitAll()
+            .requestMatchers(
+                "/swagger-ui.html",
+                "/swagger-ui/**",
+                "/v3/api-docs/**",
+                "/v3/api-docs.yaml").permitAll()
             .anyRequest().authenticated())
+        .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
         .headers(headers -> headers
             .frameOptions(FrameOptionsConfig::sameOrigin))
-        .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
         .build();
   }
 

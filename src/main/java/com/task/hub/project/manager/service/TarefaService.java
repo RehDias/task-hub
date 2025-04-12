@@ -1,8 +1,12 @@
 package com.task.hub.project.manager.service;
 
+import com.task.hub.project.manager.entity.Projeto;
 import com.task.hub.project.manager.entity.Tarefa;
+import com.task.hub.project.manager.entity.Usuario;
 import com.task.hub.project.manager.repository.TarefaRepository;
+import com.task.hub.project.manager.service.exceptions.ProjetoNotFoundException;
 import com.task.hub.project.manager.service.exceptions.TarefaNotFoundException;
+import com.task.hub.project.manager.service.exceptions.UsuarioNotFoundException;
 import jakarta.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
@@ -15,10 +19,15 @@ import org.springframework.validation.annotation.Validated;
 public class TarefaService {
 
   private final TarefaRepository tarefaRepository;
+  private final UsuarioService usuarioService;
+  private final ProjetoService projetoService;
 
   @Autowired
-  public TarefaService(TarefaRepository tarefaRepository) {
+  public TarefaService(TarefaRepository tarefaRepository, UsuarioService usuarioService,
+      ProjetoService projetoService) {
     this.tarefaRepository = tarefaRepository;
+    this.usuarioService = usuarioService;
+    this.projetoService = projetoService;
   }
 
   public Tarefa criarTarefa(@Valid Tarefa tarefa) {
@@ -52,4 +61,41 @@ public class TarefaService {
 
     return tarefa;
   }
+
+  public Tarefa adicionarResponsavel(Long tarefaId, Long usuarioId)
+      throws TarefaNotFoundException, UsuarioNotFoundException {
+    Tarefa tarefa = buscarPorId(tarefaId);
+    Usuario usuario = usuarioService.buscarPorId(usuarioId);
+
+    tarefa.setResponsavel(usuario);
+
+    return tarefaRepository.save(tarefa);
+  }
+
+  public Tarefa removerResponsavel(Long tarefaId) throws TarefaNotFoundException {
+    Tarefa tarefa = buscarPorId(tarefaId);
+
+    tarefa.setResponsavel(null);
+
+    return tarefaRepository.save(tarefa);
+  }
+
+  public Tarefa adicionarProjeto(Long tarefaId, Long projetoId)
+      throws TarefaNotFoundException, ProjetoNotFoundException {
+    Tarefa tarefa = buscarPorId(tarefaId);
+    Projeto projeto = projetoService.buscarPorId(projetoId);
+
+    tarefa.setProjeto(projeto);
+
+    return tarefaRepository.save(tarefa);
+  }
+
+  public Tarefa removerProjeto(Long tarefaId) throws TarefaNotFoundException {
+    Tarefa tarefa = buscarPorId(tarefaId);
+
+    tarefa.setProjeto(null);
+
+    return tarefaRepository.save(tarefa);
+  }
+
 }

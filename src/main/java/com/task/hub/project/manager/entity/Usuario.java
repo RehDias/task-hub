@@ -54,20 +54,16 @@ public class Usuario implements UserDetails {
   @OneToMany(mappedBy = "responsavel", cascade = CascadeType.ALL)
   private List<Tarefa> tarefas;
 
-  @Enumerated(EnumType.STRING)
   private String role;
 
   @Column(nullable = false, unique = true)
   @NotBlank(message = "O username é obrigatório")
   private String username;
 
-  public Usuario(String nome, String email, String password, List<Time> time, List<Tarefa> tarefas,
-      String role, String username) {
+  public Usuario(String nome, String email, String password, String role, String username) {
     this.nome = nome;
     this.email = email;
     this.password = password;
-    this.time = time;
-    this.tarefas = tarefas;
     this.role = role;
     this.username = username;
   }
@@ -85,5 +81,25 @@ public class Usuario implements UserDetails {
   @Override
   public String getUsername() {
     return username;
+  }
+
+  @Override
+  public boolean isAccountNonExpired() {
+    return true;
+  }
+
+  @Override
+  public boolean isAccountNonLocked() {
+    return true;
+  }
+
+  @Override
+  public boolean isCredentialsNonExpired() {
+    return true;
+  }
+
+  @Override
+  public boolean isEnabled() {
+    return true;
   }
 }

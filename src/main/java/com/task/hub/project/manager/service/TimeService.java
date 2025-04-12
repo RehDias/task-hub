@@ -1,7 +1,9 @@
 package com.task.hub.project.manager.service;
 
+import com.task.hub.project.manager.entity.Projeto;
 import com.task.hub.project.manager.entity.Time;
 import com.task.hub.project.manager.repository.TimeRepository;
+import com.task.hub.project.manager.service.exceptions.ProjetoNotFoundException;
 import com.task.hub.project.manager.service.exceptions.TimeNotFoundException;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -14,13 +16,15 @@ import org.springframework.validation.annotation.Validated;
 public class TimeService {
 
   private final TimeRepository timeRepository;
+  private final ProjetoService projetoService;
 
   @Autowired
-  public TimeService(TimeRepository timeRepository) {
+  public TimeService(TimeRepository timeRepository, ProjetoService projetoService) {
     this.timeRepository = timeRepository;
+    this.projetoService = projetoService;
   }
 
-  public Time criarTime(@Valid Time time) {
+  public Time salvarTime(@Valid Time time) {
     return timeRepository.save(time);
   }
 
@@ -37,7 +41,6 @@ public class TimeService {
 
     timeDb.setNome(time.getNome());
     timeDb.getMembros().clear();
-    timeDb.getMembros().addAll(time.getMembros());
 
     return timeRepository.save(timeDb);
   }
@@ -48,5 +51,23 @@ public class TimeService {
     timeRepository.deleteById(id);
 
     return time;
+  }
+
+  public Time adicionarProjetoAoTime(Long timeId, Long projetoId)
+      throws TimeNotFoundException, ProjetoNotFoundException {
+    Time time = buscarPorId(timeId);
+    Projeto projeto = projetoService.buscarPorId(projetoId);
+
+    time.setProjeto(projeto);
+
+    return timeRepository.save(time);
+  }
+
+  public Time removerProjetoDoTime(Long timeId) throws TimeNotFoundException {
+    Time time = buscarPorId(timeId);
+
+    time.setProjeto(null);
+
+    return timeRepository.save(time);
   }
 }

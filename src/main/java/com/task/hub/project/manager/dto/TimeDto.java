@@ -16,7 +16,9 @@ public record TimeDto(
     return new TimeDto(
         time.getId(),
         time.getNome(),
-        time.getMembros().stream().map(UsuarioDto::fromEntity).toList(),
+        time.getMembros() != null
+            ? time.getMembros().stream().map(UsuarioDto::fromEntity).toList()
+            : List.of(),
         projetoDto
     );
   }

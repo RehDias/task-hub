@@ -48,13 +48,10 @@ public class Tarefa {
   @JoinColumn(name = "usuario_id")
   private Usuario responsavel;
 
-  public Tarefa(String titulo, String descricao, Status status, LocalDate dataFim, Projeto projeto,
-      Usuario responsavel) {
+  public Tarefa(String titulo, String descricao, Status status, LocalDate dataFim) {
     this.titulo = titulo;
     this.descricao = descricao;
     this.status = status;
     this.dataFim = dataFim;
-    this.projeto = projeto;
-    this.responsavel = responsavel;
   }
 }

@@ -89,23 +89,10 @@
 
 	<build>
 		<resources>
-			<!-- Não faz filtering para todos por padrão -->
 			<resource>
 				<directory>src/main/resources</directory>
 				<filtering>false</filtering>
-				<includes>
-					<include>**/*.properties</include>
-				</includes>
 			</resource>
-
-<!--			&lt;!&ndash; Faz filtering só para o application-prod.properties &ndash;&gt;-->
-<!--			<resource>-->
-<!--				<directory>src/main/resources</directory>-->
-<!--				<filtering>true</filtering>-->
-<!--				<includes>-->
-<!--					<include>application-prod.properties</include>-->
-<!--				</includes>-->
-<!--			</resource>-->
 		</resources>
 		<plugins>
 			<plugin>
@@ -124,6 +111,14 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>3.1.0</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
 				<configuration>
 					<excludes>
 						<exclude>

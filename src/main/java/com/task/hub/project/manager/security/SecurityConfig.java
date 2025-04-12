@@ -40,10 +40,15 @@ public class SecurityConfig {
             .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
             .requestMatchers("/h2-console/**").permitAll()
             .requestMatchers(
+                "/v3/api-docs",
+                "/v3/api-docs/**",
                 "/swagger-ui.html",
                 "/swagger-ui/**",
-                "/v3/api-docs/**",
-                "/v3/api-docs.yaml").permitAll()
+                "/swagger-resources/**",
+                "/configuration/ui",
+                "/configuration/security",
+                "/webjars/**").permitAll()
+
             .anyRequest().authenticated())
         .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
         .headers(headers -> headers
